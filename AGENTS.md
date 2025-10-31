@@ -1,4 +1,3 @@
-PROJECT_DIR = rcdv
 PROJECT_NAME = codex-github-integration
 
 # Agent Playbook
@@ -10,15 +9,19 @@ Reference guide for AI coding agents working inside this repository.
 - Default shell is `bash`; commands run via `["bash","-lc","<cmd>"]`
 - Launch command for context:
   ```bash
-  docker run -it --rm \
-    -v "$PROJ_DIR":/workspace \
-    --privileged \
-    -v "$HOME/.config/codex":/home/dev/.config/codex \
-    -v /var/run/docker.sock:/var/run/docker.sock \
-    -e OPENAI_API_KEY \
-    -w /workspace \
-    "$(basename "$PROJ_DIR")" \
-    bash -lc "codex --yolo"
+    docker run -it --rm \
+      --privileged \
+      -v "$PROJ_DIR":/workspace \
+      -v "$HOME/.codex":/home/dev/.codex \
+      --group-add "$(stat -c '%g' /var/run/docker.sock 2>/dev/null || echo 0)" \
+      -v /var/run/docker.sock:/var/run/docker.sock \
+      -v "$HOME/.ssh":/home/dev/.ssh:ro \
+      -e OPENAI_API_KEY \
+      -e GITHUB_USER \
+      -e GITHUB_KEY \
+      -w /workspace \
+      "$(basename "$PROJ_DIR")" \
+      bash -lc "codex --yolo"
   ```
 
 ## Project Layout
@@ -34,16 +37,15 @@ Reference guide for AI coding agents working inside this repository.
 - After validation, request approval to squash-merge into `develop`
 
 ## Repository Workflow
-- Project coordinates: `PROJECT_DIR` and `PROJECT_NAME` are declared at the top of this file.
+- Project coordinates: `PROJECT_NAME` is declared at the top of this file.
 - Environment variables: only `GITHUB_USER` (GitHub username tied to the PAT) and `GITHUB_KEY` (fine-grained PAT) are injected.
 
-1. Create the remote via the MCP `create_repository` tool (repos toolset). Use the sandbox org declared above (`owner="rcdv"`, same as `PROJECT_DIR`) and `name="$PROJECT_NAME"`; this calls GitHub’s `/orgs/{owner}/repos` endpoint, which is what our fine-grained PAT is scoped for.
-2. Initialize locally and branch: run `git init`, stage the starter files, and `git checkout -b feature/<task>` (or `fix/<bug>`). The first push from this branch seeds the repo; subsequent work should continue on feature/fix branches rather than `main`.
-3. Wire the remote using the coordinates above:
+1. Create the remote via the MCP `create_repository` tool (repos toolset). Use the sandbox org declared above (`owner="rcdv"`) and `name="$PROJECT_NAME"`; this calls GitHub’s `/orgs/{owner}/repos` endpoint, which is what our fine-grained PAT is scoped for.
+2. Wire the remote using the coordinates above:
    ```bash
-   git remote add origin https://github.com/<PROJECT_DIR>/<PROJECT_NAME>.git
+   git remote git@github.com:rcdv/<PROJECT_NAME>.git
    ```
-4. Push commits (always from your feature/fix branch):
+3. Push commits (always from your feature/fix branch):
    ```bash
    git push -u origin feature/<task>
 - GitHub sandbox automation supports: creating repositories via the MCP `create_repository` tool, initializing a matching local repo (`git init`, first commit), wiring the remote to the sandbox org, and pushing commits using the scoped PATH.
