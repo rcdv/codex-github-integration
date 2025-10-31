@@ -41,7 +41,7 @@ Reference guide for AI coding agents working inside this repository.
 2. Initialize locally and branch: run `git init`, stage the starter files, and `git checkout -b feature/<task>` (or `fix/<bug>`). The first push from this branch seeds the repo; subsequent work should continue on feature/fix branches rather than `main`.
 3. Wire the remote using the coordinates above:
    ```bash
-   git remote add origin https://$GITHUB_USER:$GITHUB_KEY@github.com/<PROJECT_DIR>/<PROJECT_NAME>.git
+   git remote add origin https://github.com/<PROJECT_DIR>/<PROJECT_NAME>.git
    ```
 4. Push commits (always from your feature/fix branch):
    ```bash
