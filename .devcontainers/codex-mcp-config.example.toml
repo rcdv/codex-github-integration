@@ -1,0 +1,13 @@
+# Example Codex MCP configuration for the GitHub sandbox server.
+# Copy this file to ~/.config/codex/config.toml and ensure GITHUB_KEY is exported.
+
+[servers.github-sandbox]
+type = "http"
+url = "https://api.githubcopilot.com/mcp/"
+
+[servers.github-sandbox.headers]
+Authorization = "Bearer ${env:GITHUB_KEY}"
+X-MCP-Toolsets = "repos,issues,pull_requests,actions"
+
+[defaults]
+server = "github-sandbox"
