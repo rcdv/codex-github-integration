@@ -1,4 +1,4 @@
-PROJECT_NAME = codex-github-integration
+PROJECT_NAME = bis-view
 
 ## Environment Snapshot
 - Running inside a privileged Docker-in-Docker container at `/workspace`
