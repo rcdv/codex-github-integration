@@ -50,6 +50,7 @@ codexstart() {
       --privileged \
       -v "$PROJ_DIR":/workspace \
       -v "$HOME/.codex":/home/dev/.codex \
+      -v "$HOME/.gitconfig":/home/dev/.gitconfig:ro \
       --group-add "$(stat -c '%g' /var/run/docker.sock 2>/dev/null || echo 0)" \
       -v /var/run/docker.sock:/var/run/docker.sock \
       -v "$HOME/.ssh":/home/dev/.ssh:ro \
@@ -63,6 +64,7 @@ codexstart() {
       --privileged \
       -v "$PROJ_DIR":/workspace \
       -v "$HOME/.codex":/home/dev/.codex \
+      -v "$HOME/.gitconfig":/home/dev/.gitconfig:ro \
       --group-add "$(stat -c '%g' /var/run/docker.sock 2>/dev/null || echo 0)" \
       -v /var/run/docker.sock:/var/run/docker.sock \
       -v "$HOME/.ssh":/home/dev/.ssh:ro \
