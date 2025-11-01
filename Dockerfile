@@ -14,7 +14,8 @@ RUN apk add --no-cache \
     bash \
     sudo \
     shadow \
-    python3 && \
+    python3 \
+    ripgrep && \
     # Install build dependencies temporarily for mcp compilation
     apk add --no-cache --virtual .build-deps build-base libffi-dev && \
     # Install Docker CLI and SSH client
