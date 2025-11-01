@@ -1,7 +1,4 @@
 #!/bin/bash
-# OpenAI Codex Docker helper functions
-# Source this file in your .bashrc or .zshrc:
-# source /path/to/codex-functions.sh
 
 codexbuild() {
   local PROJ_DIR=""
@@ -34,7 +31,7 @@ codexbuild() {
   docker build \
     --build-arg HOST_UID="$UID_VAL" \
     --build-arg HOST_GID="$GID_VAL" \
-    -f "$PROJ_DIR/.devcontainers/Dockerfile" \
+    -f "$PROJ_DIR/Dockerfile" \
     -t "$(basename "$PROJ_DIR")" \
     "${flags[@]}" \
     "$PROJ_DIR"
@@ -80,6 +77,5 @@ codexstart() {
   popd >/dev/null
 }
 
-# Export functions
 export -f codexbuild
 export -f codexstart

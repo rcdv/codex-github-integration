@@ -15,10 +15,20 @@ RUN apk add --no-cache \
     sudo \
     shadow \
     python3 && \
-    # Install Docker CLI
-    curl -fsSL https://download.docker.com/linux/static/stable/$(uname -m | sed 's/x86_64/x86_64/' | sed 's/aarch64/aarch64/')/docker-27.4.1.tgz | \
+    # Install build dependencies temporarily for mcp compilation
+    apk add --no-cache --virtual .build-deps build-base libffi-dev && \
+    # Install Docker CLI and SSH client
+    curl -fsSL https://download.docker.com/linux/static/stable/aarch64/docker-27.4.1.tgz | \
     tar xz -C /usr/local/bin --strip-components=1 docker/docker && \
-    apk add --no-cache openssh-client
+    apk add --no-cache openssh-client && \
+    # Install uv (ultra-fast Python package manager) to /usr/local/bin
+    curl -LsSf https://astral.sh/uv/install.sh | sh && \
+    mv /root/.local/bin/uv /usr/local/bin/uv && \
+    mv /root/.local/bin/uvx /usr/local/bin/uvx && \
+    # Install MCP Python SDK to system Python using uv
+    /usr/local/bin/uv pip install --system --break-system-packages "mcp[cli]" && \
+    # Remove build dependencies after compilation
+    apk del .build-deps
 
 # Create docker group and dev user
 RUN addgroup -g 998 docker 2>/dev/null || true && \
