@@ -1,9 +1,8 @@
-PROJECT_NAME = bis-view
+PROJECT_NAME = codex-template
 
 ## Environment Snapshot
 - Running inside a privileged Docker-in-Docker container at `/workspace`
 - Full sudo access; network is open; filesystem has no sandbox restrictions
-- Default shell is `bash`; commands run via `["bash","-lc","<cmd>"]`
 - Launch command for context:
   ```bash
     docker run -it --rm \
@@ -23,7 +22,6 @@ PROJECT_NAME = bis-view
 
 ## Project Layout
 - `Dockerfile` — Container environment definition
-- `AGENTS.md` — This playbook
 
 ## Workflow Expectations
 - Always create a feature branch per task: `git checkout -b feature/<task>`
@@ -35,7 +33,7 @@ PROJECT_NAME = bis-view
 - Project coordinates: `PROJECT_NAME` is declared at the top of this file.
 - Environment variables: only `GITHUB_USER` (GitHub username tied to the PAT) and `GITHUB_KEY` (fine-grained PAT) are injected.
 
-1. Create the remote via the MCP `create_repository` tool (repos toolset). Use the sandbox org declared above (`owner="rcdv"`) and `name="$PROJECT_NAME"`; this calls GitHub’s `/orgs/{owner}/repos` endpoint, which is what our fine-grained PAT is scoped for.
+1. Create the remote via the MCP `create_repository` tool (repos toolset). Use the sandbox org declared above (`owner="rcdv"`) and `name="$PROJECT_NAME"`; this calls GitHub’s `/orgs/{owner}/repos` endpoint, which is what our fine-grained PAT is scoped for. ON CREATION ALWAYS SET REPOSITORY VISIBILITY TO PRIVATE!!!
 2. Wire the remote using the coordinates above:
    ```bash
    git remote git@github.com:rcdv/<PROJECT_NAME>.git
@@ -43,7 +41,7 @@ PROJECT_NAME = bis-view
 3. Push commits (always from your feature/fix branch):
    ```bash
    git push -u origin feature/<task>
-- GitHub sandbox automation supports: creating repositories via the MCP `create_repository` tool, initializing a matching local repo (`git init`, first commit), wiring the remote to the sandbox org, and pushing commits using the scoped PATH.
+- GitHub sandbox automation supports: creating repositories via the MCP `create_repository` tool , initializing a matching local repo (`git init`, first commit), wiring the remote to the sandbox org, and pushing commits using the scoped PATH.
 - GitHub MCP capabilities (toolsets you can rely on):
   - **Repositories (`repos` toolset)** – Create repositories and branches, list commits/tags, push file updates (`create_repository`) - you should push from local (using remote).
   - **Issues (`issues` toolset)** – Search, read, create, update, label, comment on, and close/reopen issues; mark duplicates or change state reasons.

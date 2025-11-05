@@ -21,6 +21,9 @@ RUN apk add --no-cache \
     # Install Docker CLI and SSH client
     curl -fsSL https://download.docker.com/linux/static/stable/aarch64/docker-27.4.1.tgz | \
     tar xz -C /usr/local/bin --strip-components=1 docker/docker && \
+    mkdir -p /usr/local/lib/docker/cli-plugins && \
+    curl -fsSL https://github.com/docker/compose/releases/download/v2.40.2/docker-compose-linux-aarch64 -o /usr/local/lib/docker/cli-plugins/docker-compose && \
+    chmod +x /usr/local/lib/docker/cli-plugins/docker-compose && \
     apk add --no-cache openssh-client && \
     # Install uv (ultra-fast Python package manager) to /usr/local/bin
     curl -LsSf https://astral.sh/uv/install.sh | sh && \
@@ -54,7 +57,7 @@ ENV PATH="/home/dev/.npm-global/bin:/home/dev/.local/bin:${PATH}"
 RUN echo 'export PATH="/home/dev/.npm-global/bin:/home/dev/.local/bin:${PATH}"' >> /home/dev/.bashrc && \
     echo 'export PATH="/home/dev/.npm-global/bin:/home/dev/.local/bin:${PATH}"' >> /home/dev/.profile
 
-# Install OpenAI Codex CLI
+# Install OpenAI Codex CLI and bundled MCP servers
 RUN npm install -g @openai/codex
 
 USER root
